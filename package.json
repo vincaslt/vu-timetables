@@ -1,0 +1,39 @@
+{
+  "name": "mif-timetables",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.13.1",
+    "babel-eslint": "^6.1.2",
+    "bluebird": "^3.4.1",
+    "eslint": "^3.2.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-import-resolver-webpack": "^0.4.0",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^5.2.2",
+    "jsdom": "^9.4.5",
+    "material-ui": "^0.15.4",
+    "react": "^15.2.1",
+    "react-bootstrap": "^0.30.0",
+    "react-dom": "^15.2.1",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.6.0",
+    "react-router-redux": "^4.0.5",
+    "react-tap-event-plugin": "^1.0.0",
+    "redux": "^3.5.2",
+    "redux-devtools": "^3.3.1",
+    "redux-form": "^5.3.1",
+    "redux-logger": "^2.6.1",
+    "redux-thunk": "^2.1.0",
+    "reselect": "^2.5.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  }
+}
