@@ -1,1 +1,2 @@
-export const API_KEY = 'AIzaSyDik81zTI-2v-t0F-jEBLsKizfnD2CmQ8g';
+export const API_URL = 'http://localhost:8080/api';
+export const COURSES_URL = `${API_URL}/courses`;
