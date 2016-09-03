@@ -2,6 +2,8 @@ var restify = require('restify');
 var Promise = require('bluebird');
 var xray = require('x-ray');
 
+var p = Promise.promisify;
+
 var x = xray({
   filters: {
     trim: function (value) {
@@ -15,6 +17,7 @@ var x = xray({
 });
 
 var COURSES_URL = 'https://mif.vu.lt/timetable/mif/';
+var LECTURES_URL = 'https://mif.vu.lt/timetable/mif/courses/';
 
 
 var server = restify.createServer({
@@ -38,9 +41,48 @@ var getCourses = Promise.promisify(
   }])
 );
 
+function getTimetable(courseId) {
+  var parseTable = p(
+    x(LECTURES_URL + courseId + '/', ['tr@html | trim'])
+  );
+
+  var isMainHeading = function (row) {
+    return p(x(row, 'th@colspan'))()
+      .then(function (colspan) {
+        return colspan == 6;
+      });
+  }
+
+  var getWeekday = function (row) {
+    return isMainHeading(row)
+      .then(function(isMain) {
+        return isMain ? p(x(row, 'th | trim'))() : null;
+      });
+  }
+
+  parseTable().then(function (rows) {
+    var currentDay = '';
+    rows.forEach(function (row) {
+      getWeekday(row)
+        .then(function (day) {
+          currentDay = day || currentDay;
+        }); //TODO get lessons for each day
+    });
+  });
+
+  return parseTable();
+}
+
 server.get('/api/courses', function (req, res, next) {
   getCourses().then(function (courses) {
     res.send(courses);
+  });
+  return next();
+});
+
+server.get('/api/timetable/:courseId', function (req, res, next) {
+  getTimetable(req.params.courseId).then(function (timetable) {
+    res.send(timetable);
   });
   return next();
 });
