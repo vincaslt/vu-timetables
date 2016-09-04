@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.4.6",
+    "entities": "^1.1.1",
+    "es6-shim": "^0.35.1",
     "restify": "^4.1.1",
     "x-ray": "^2.3.0"
   }

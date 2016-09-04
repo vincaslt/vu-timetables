@@ -1,6 +1,8 @@
 var restify = require('restify');
 var Promise = require('bluebird');
 var xray = require('x-ray');
+var entities = require("entities");
+require('es6-shim');
 
 var p = Promise.promisify;
 
@@ -12,12 +14,24 @@ var x = xray({
     index: function (url) {
       parts = url.split('/');
       return Number(parts[parts.length - 2]);
+    },
+    decode: function (value) {
+      return entities.decodeHTML(value);
     }
   }
 });
 
-var COURSES_URL = 'https://mif.vu.lt/timetable/mif/';
-var LECTURES_URL = 'https://mif.vu.lt/timetable/mif/courses/';
+function promiseWhile(predicate, action, value) {
+  return Promise.resolve(value)
+    .then(predicate)
+    .then(function(condition) {
+      if (condition)
+        return promiseWhile(predicate, action, action());
+    });
+}
+
+var COURSES_URL = 'https://mif.vu.lt/timetable/';
+var LECTURES_URL = '/courses/';
 
 
 var server = restify.createServer({
@@ -34,59 +48,141 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-var getCourses = Promise.promisify(
-  x(COURSES_URL, '.col-sm-12', [{
-    title: 'a@html | trim',
-    id: 'a@href | index'
-  }])
-);
+var getCourses = function(department) {
+  return p(x(COURSES_URL + department + '/', '.col-sm-12', [{
+    title: 'a@html | trim | decode',
+    id: 'a@href | index | decode'
+  }]))();
+}
 
-function getTimetable(courseId) {
-  var parseTable = p(
-    x(LECTURES_URL + courseId + '/', ['tr@html | trim'])
+function getTimetable(department, courseId) {
+  var parseTable = p(x(COURSES_URL + department + LECTURES_URL + courseId + '/',
+    ['tr@html | trim | decode'])
   );
 
   var isMainHeading = function (row) {
     return p(x(row, 'th@colspan'))()
       .then(function (colspan) {
-        return colspan == 6;
+        return colspan > 1;
       });
   }
 
   var getWeekday = function (row) {
     return isMainHeading(row)
       .then(function(isMain) {
-        return isMain ? p(x(row, 'th | trim'))() : null;
+        return isMain ? p(x(row, 'th | trim | decode'))() : null;
       });
   }
 
-  parseTable().then(function (rows) {
-    var currentDay = '';
-    rows.forEach(function (row) {
-      getWeekday(row)
-        .then(function (day) {
-          currentDay = day || currentDay;
-        }); //TODO get lessons for each day
-    });
-  });
+  var getTime = function(formattedTime) {
+    time = formattedTime.split(':');
+    return {
+      hour: time[0],
+      minutes: time[1]
+    };
+  }
 
-  return parseTable();
+  var parseLectures = function(tagValues, currentDay, evenWeek, group) {
+    if (!tagValues || tagValues.length < 7) {
+      return [];
+    }
+
+    var subgroups = null;
+    if (tagValues[5].startsWith('Pogrupiai:')) {
+      subgroups = tagValues
+        .splice(5, 1)[0]
+        .slice(11)
+        .split(',')
+        .map(function (subgroup) {
+          return subgroup.split('').join('.');
+        });
+    }
+
+    var formattedTimes = tagValues[0].split(' - ');
+
+    var lectureModel = {
+      title: tagValues[3],
+      time: {
+        day: currentDay,
+        start: getTime(formattedTimes[0]),
+        end: getTime(formattedTimes[1]),
+        odd: tagValues[2].startsWith('Kiekvien') || !evenWeek,
+        even: tagValues[2].startsWith('Kiekvien') || evenWeek
+      },
+      group: group,
+      subgroups: subgroups,
+      type: tagValues[4],
+      lector: tagValues[5],
+      auditorium: tagValues[6]
+    };
+
+    if (!tagValues[2].startsWith('Kiekvien')) {
+      evenWeek = !evenWeek;
+    }
+
+    return [lectureModel].concat(parseLectures(
+      tagValues.slice(7),
+      currentDay,
+      evenWeek,
+      group
+    ));
+  }
+
+  var getLecuresInRow = function (row, currentDay) {
+    return p(x(row, ['td | trim | decode']))()
+      .then(function (columns) {
+        var group = 0;
+        var lectures = [];
+        columns.forEach(function(column) {
+          group++;
+          var tagValues = column.split(/[\n]+/)
+            .map(function (str) {
+              return str.trim();
+            })
+            .filter(Boolean);
+          lectures = lectures.concat(
+            parseLectures(tagValues, currentDay, true, group)
+          );
+        });
+        return lectures;
+      });
+  }
+
+  var parseTimetable = function(rows, index, lectures, currentDay) {
+    if (rows[index] === undefined) {
+      return lectures;
+    }
+
+    return getWeekday(rows[index])
+      .then(function (day) {
+        currentDay = day || currentDay;
+        return getLecuresInRow(rows[index], currentDay);
+      })
+      .then(function (lecturesInRow) {
+        lectures = lectures.concat(lecturesInRow);
+        return parseTimetable(rows, index + 1, lectures, currentDay);
+      });
+  }
+
+  return parseTable().then(function (tableRows) {
+    return parseTimetable(tableRows, 0, [], '');
+  });
 }
 
-server.get('/api/courses', function (req, res, next) {
-  getCourses().then(function (courses) {
-    res.send(courses);
+server.get('/api/courses/:dept', function (req, res, next) {
+  getCourses(req.params.dept).then(function (courses) {
+    res.json(courses, {'content-type': 'application/json; charset=utf-8'});
+  })
+  return next();
+});
+
+server.get('/api/timetable/:dept/:courseId', function (req, res, next) {
+  getTimetable(req.params.dept, req.params.courseId).then(function (timetable) {
+    res.json(timetable, {'content-type': 'application/json; charset=utf-8'});
   });
   return next();
 });
 
-server.get('/api/timetable/:courseId', function (req, res, next) {
-  getTimetable(req.params.courseId).then(function (timetable) {
-    res.send(timetable);
-  });
-  return next();
-});
-
-server.listen(8080, function () {
-  console.log('%s listening at %s', server.name, server.url);
+server.listen(8080, '0.0.0.0', function () {
+  console.log('\n%s listening at %s', server.name, server.url);
 });
