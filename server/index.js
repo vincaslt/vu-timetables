@@ -99,6 +99,20 @@ function getTimetable(department, courseId) {
     }
 
     var formattedTimes = tagValues[0].split(' - ');
+    console.log('---------');
+    console.log(tagValues[0]);
+    console.log(tagValues[1]);
+    console.log(tagValues[2]);
+    console.log(tagValues[3]);
+    console.log(tagValues[4]);
+    console.log(tagValues[5]);
+    console.log(tagValues[6]);
+
+    var auditorium = tagValues[6];
+    if (tagValues[7] && !tagValues[7].includes(':')) {
+      auditorium = [auditorium].concat(tagValues.splice(7, 1));
+      console.log(auditorium);
+    }
 
     var lectureModel = {
       title: tagValues[3],
@@ -113,7 +127,7 @@ function getTimetable(department, courseId) {
       subgroups: subgroups,
       type: tagValues[4],
       lector: tagValues[5],
-      auditorium: tagValues[6]
+      auditorium: auditorium
     };
 
     if (!tagValues[2].startsWith('Kiekvien')) {
