@@ -21,16 +21,7 @@ var x = xray({
   }
 });
 
-function promiseWhile(predicate, action, value) {
-  return Promise.resolve(value)
-    .then(predicate)
-    .then(function(condition) {
-      if (condition)
-        return promiseWhile(predicate, action, action());
-    });
-}
-
-var COURSES_URL = 'https://mif.vu.lt/timetable/';
+var TIMETABLES_URL = 'https://mif.vu.lt/timetable/';
 var LECTURES_URL = '/courses/';
 
 
@@ -48,15 +39,21 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
+var getDepartments = p(x(TIMETABLES_URL, '.col-sm-4 a', [{
+  title: 'h3 small',
+  url: '@href',
+  logo: 'img@src'
+}]));
+
 var getCourses = function(department) {
-  return p(x(COURSES_URL + department + '/', '.col-sm-12', [{
+  return p(x(TIMETABLES_URL + department + '/', '.col-sm-12', [{
     title: 'a@html | trim | decode',
     id: 'a@href | index | decode'
   }]))();
 }
 
 function getTimetable(department, courseId) {
-  var parseTable = p(x(COURSES_URL + department + LECTURES_URL + courseId + '/',
+  var parseTable = p(x(TIMETABLES_URL + department + LECTURES_URL + courseId + '/',
     ['tr@html | trim | decode'])
   );
 
@@ -173,6 +170,13 @@ function getTimetable(department, courseId) {
     return parseTimetable(tableRows, 0, [], '');
   });
 }
+
+server.get('/api/departments', function (req, res, next) {
+  getDepartments().then(function (departments) {
+    res.json(departments, {'content-type': 'application/json; charset=utf-8'});
+  });
+  return next();
+});
 
 server.get('/api/courses/:dept', function (req, res, next) {
   getCourses(req.params.dept).then(function (courses) {
