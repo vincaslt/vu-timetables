@@ -11,9 +11,10 @@ var x = xray({
     trim: function (value) {
       return typeof value === 'string' ? value.trim() : value
     },
-    index: function (url) {
-      parts = url.split('/');
-      return Number(parts[parts.length - 2]);
+    index: function (url, raw) {
+      var parts = url.split('/');
+      var id = parts[parts.length - 2];
+      return raw === 'true' ? id : Number(id);
     },
     decode: function (value) {
       return entities.decodeHTML(value);
@@ -41,14 +42,14 @@ server.use(restify.bodyParser());
 
 var getDepartments = p(x(TIMETABLES_URL, '.col-sm-4 a', [{
   title: 'h3 small',
-  url: '@href',
+  id: '@href | index:true',
   logo: 'img@src'
 }]));
 
 var getCourses = function(department) {
   return p(x(TIMETABLES_URL + department + '/', '.col-sm-12', [{
     title: 'a@html | trim | decode',
-    id: 'a@href | index | decode'
+    id: 'a@href | index:false'
   }]))();
 }
 
