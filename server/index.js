@@ -11,9 +11,9 @@ var x = xray({
     trim: function (value) {
       return typeof value === 'string' ? value.trim() : value
     },
-    index: function (url, raw) {
+    index: function (url, raw, offset) {
       var parts = url.split('/');
-      var id = parts[parts.length - 2];
+      var id = parts[parts.length - (offset || 2)];
       return raw === 'true' ? id : Number(id);
     },
     decode: function (value) {
@@ -49,7 +49,8 @@ var getDepartments = p(x(TIMETABLES_URL, '.col-sm-4 a', [{
 var getCourses = function(department) {
   return p(x(TIMETABLES_URL + department + '/', '.col-sm-12', [{
     title: 'a@html | trim | decode',
-    id: 'a@href | index:false'
+    id: 'a@href | index:false',
+    departmentId: 'a@href | index:true,4'
   }]))();
 }
 
