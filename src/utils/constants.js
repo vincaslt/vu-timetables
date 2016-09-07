@@ -1,2 +1,4 @@
-export const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://timetables.stonyvin.net/api';
+export const DEPARTMENTS_URL = `${API_URL}/departments`;
 export const COURSES_URL = `${API_URL}/courses`;
+export const TIMETABLE_URL = `${API_URL}/timetable`;
