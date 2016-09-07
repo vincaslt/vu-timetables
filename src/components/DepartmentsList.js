@@ -1,8 +1,15 @@
 import React, { PropTypes } from 'react';
 
-const DepartmentsList = ({ departments }) => {
+const DepartmentsList = ({ departments, onDepartmentSelect = () => true }) => {
   const listItems = departments.map((department) => (
-    <li><a href={`/${department.id}`}>{department.title}</a></li>
+    <li key={department.id}>
+      <a
+        href="#"
+        onClick={() => onDepartmentSelect(department)}
+      >
+        [{department.id}] {department.title}
+      </a>
+    </li>
   ));
   return (
     <ul>
@@ -12,7 +19,8 @@ const DepartmentsList = ({ departments }) => {
 };
 
 DepartmentsList.propTypes = {
-  departments: PropTypes.array.isRequired
+  departments: PropTypes.array.isRequired,
+  onDepartmentSelect: PropTypes.func,
 };
 
 export default DepartmentsList;

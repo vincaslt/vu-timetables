@@ -12,7 +12,7 @@ const receiveDepartments = (departments) => ({
 
 export function fetchDepartments() {
   return dispatch => {
-    dispatch(requestDepartments);
+    dispatch(requestDepartments());
     getDepartments()
       .then(departments => dispatch(
         receiveDepartments(departments)
