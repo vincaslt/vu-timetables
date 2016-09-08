@@ -15,7 +15,7 @@ class HomePage extends Component {
     courses: PropTypes.object.isRequired,
     fetchDepartments: PropTypes.func.isRequired,
     fetchCourses: PropTypes.func.isRequired,
-  };
+  }
 
   componentWillMount() {
     this.props.fetchDepartments();
@@ -23,7 +23,12 @@ class HomePage extends Component {
 
   handleSelectDepartment = (department) => {
     this.props.fetchCourses(department.id);
-  };
+  }
+
+  handleSelectCourse = (course) => {
+    // TODO
+    console.log(course);
+  }
 
   render() {
     const { departments, courses } = this.props;
@@ -39,6 +44,7 @@ class HomePage extends Component {
         <LoadingIndicator wait={courses.loading}>
           <CoursesList
             courses={courses.list}
+            onCourseSelect={this.handleSelectCourse}
           />
         </LoadingIndicator>
       </div>

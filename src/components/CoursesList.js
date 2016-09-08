@@ -1,8 +1,12 @@
 import React, { PropTypes } from 'react';
 
-const CoursesList = ({ courses }) => {
-  const listItems = courses.map(({ id, title }) => (
-    <li key={id}><a href="#">[{id}] {title}</a></li>
+const CoursesList = ({ courses, onCourseSelect = () => true }) => {
+  const listItems = courses.map(course => (
+    <li key={course.id}>
+      <a href="#" onClick={() => onCourseSelect(course)}>
+        [{course.id}] {course.title}
+      </a>
+    </li>
   ));
   return (
     <ul>
@@ -12,7 +16,8 @@ const CoursesList = ({ courses }) => {
 };
 
 CoursesList.propTypes = {
-  courses: PropTypes.array.isRequired
+  courses: PropTypes.array.isRequired,
+  onCourseSelect: PropTypes.func
 };
 
 export default CoursesList;
