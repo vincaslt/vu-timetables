@@ -6,6 +6,7 @@ import CoursesList from '../../components/CoursesList';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { fetchDepartments } from '../../actions/departments';
 import { fetchCourses } from '../../actions/courses';
+import { fetchTimetable } from '../../actions/timetable';
 
 import './styles.css';
 
@@ -15,6 +16,7 @@ class HomePage extends Component {
     courses: PropTypes.object.isRequired,
     fetchDepartments: PropTypes.func.isRequired,
     fetchCourses: PropTypes.func.isRequired,
+    fetchTimetable: PropTypes.func.isRequired,
   }
 
   componentWillMount() {
@@ -26,8 +28,7 @@ class HomePage extends Component {
   }
 
   handleSelectCourse = (course) => {
-    // TODO
-    console.log(course);
+    this.props.fetchTimetable(course.departmentId, course.id);
   }
 
   render() {
@@ -52,10 +53,18 @@ class HomePage extends Component {
   }
 }
 
-const mapStateToProps = (state) => (state);
+const mapStateToProps = ({ departments, courses, timetable }) => ({
+  departments,
+  courses,
+  timetable,
+});
 
 const mapDispatchToProps = (dispatch) => (
-  bindActionCreators({ fetchDepartments, fetchCourses }, dispatch)
+  bindActionCreators({
+    fetchDepartments,
+    fetchCourses,
+    fetchTimetable,
+  }, dispatch)
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

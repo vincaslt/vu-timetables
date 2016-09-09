@@ -9,7 +9,7 @@ export default function departments(state = defaultState, action) {
   switch (action.type) {
     case RECEIVE_DEPARTMENTS:
       return {
-        list: action.departments,
+        list: action.departments.slice(0),
         loading: action.loading
       };
     case REQUEST_DEPARTMENTS:
