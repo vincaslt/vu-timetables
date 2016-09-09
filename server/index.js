@@ -25,6 +25,8 @@ var x = xray({
 var TIMETABLES_URL = 'https://mif.vu.lt/timetable/';
 var LECTURES_URL = '/courses/';
 
+var TIME_REGEXP = /^\d{2}:\d{2} - \d{2}:\d{2}$/;
+
 
 var server = restify.createServer({
   name: 'mif-timetables',
@@ -100,7 +102,7 @@ function getTimetable(department, courseId) {
 
 
     var auditorium = tagValues[6];
-    if (tagValues[7] && !tagValues[7].includes(':')) {
+    if (tagValues[7] && !TIME_REGEXP.test(tagValues[7])) {
       auditorium = [auditorium].concat(tagValues.splice(7, 1));
     }
 
