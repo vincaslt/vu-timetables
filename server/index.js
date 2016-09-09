@@ -51,7 +51,8 @@ var getCourses = function(department) {
     title: 'a@html | trim | decode',
     id: 'a@href | index:false',
     departmentId: 'a@href | index:true,4'
-  }]))();
+  }]))()
+  .then(courses => courses.filter(course => !course.title.includes('(S)')));
 }
 
 function getTimetable(department, courseId) {
