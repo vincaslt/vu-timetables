@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
-import CircularProgress from 'material-ui/CircularProgress';
+import Spinner from './ui/Spinner';
 
 const LoadingIndicator = ({ wait, children }) => {
   let content = null;
   if (wait) {
-    content = <CircularProgress />;
+    content = <Spinner />;
   } else {
     content = children;
   }

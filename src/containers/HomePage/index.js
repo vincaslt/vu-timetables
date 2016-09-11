@@ -8,7 +8,7 @@ import { fetchDepartments } from '../../actions/departments';
 import { fetchCourses } from '../../actions/courses';
 import { fetchTimetable } from '../../actions/timetable';
 
-import './styles.css';
+import './styles.scss';
 
 class HomePage extends Component {
   static propTypes = {
