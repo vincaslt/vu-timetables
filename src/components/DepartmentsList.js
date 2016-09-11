@@ -3,10 +3,7 @@ import React, { PropTypes } from 'react';
 const DepartmentsList = ({ departments, onDepartmentSelect = () => true }) => {
   const listItems = departments.map((department) => (
     <li key={department.id}>
-      <a
-        href="#"
-        onClick={() => onDepartmentSelect(department)}
-      >
+      <a onClick={() => onDepartmentSelect(department)}>
         [{department.id}] {department.title}
       </a>
     </li>

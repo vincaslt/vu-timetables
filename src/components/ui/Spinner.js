@@ -15,7 +15,7 @@ const Spinner = ({ color = 'blue' }) => (
 );
 
 Spinner.propTypes = {
-  color: PropTypes.sring
+  color: PropTypes.string
 };
 
 export default Spinner;

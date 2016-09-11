@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 const CoursesList = ({ courses, onCourseSelect = () => true }) => {
   const listItems = courses.map(course => (
     <li key={course.id}>
-      <a href="#" onClick={() => onCourseSelect(course)}>
+      <a onClick={() => onCourseSelect(course)}>
         [{course.id}] {course.title}
       </a>
     </li>
