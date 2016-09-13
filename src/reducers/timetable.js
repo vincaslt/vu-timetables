@@ -1,11 +1,11 @@
-import { REQUEST_TIMETABLE, RECEIVE_TIMETABLE } from '../actions/timetable';
+import { REQUEST_TIMETABLE, RECEIVE_TIMETABLE, ACTIVATE_TIMETABLE_TAB } from '../actions/timetable';
 
 const defaultState = {
   lectures: [],
   loading: false
 };
 
-export default function timetable(state = defaultState, action) {
+export function timetable(state = defaultState, action) {
   switch (action.type) {
     case RECEIVE_TIMETABLE:
       return {
@@ -17,6 +17,15 @@ export default function timetable(state = defaultState, action) {
         lectures: [],
         loading: action.loading,
       };
+    default:
+      return state;
+  }
+}
+
+export function activeTab(state = 0, action) {
+  switch (action.type) {
+    case ACTIVATE_TIMETABLE_TAB:
+      return action.tab;
     default:
       return state;
   }

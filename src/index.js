@@ -7,6 +7,7 @@ import routes from './routes';
 import configureStore from './store/configureStore';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+import 'react-mdl/extra/material.js';
 import './app.global.scss';
 
 

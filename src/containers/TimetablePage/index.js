@@ -1,37 +1,46 @@
-import React, { Component, /*PropTypes*/ } from 'react';
-/*import { bindActionCreators } from 'redux';
+import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import DepartmentsList from '../../components/DepartmentsList';
 import LoadingIndicator from '../../components/LoadingIndicator';
-import { fetchDepartments } from '../../actions/departments';*/
+import { TimetableTabs } from '../../components/Timetable';
+import { fetchTimetable, activateTimetableTab } from '../../actions/timetable';
 
 import './styles.scss';
 
-export default class TimetablePage extends Component {
-  /*static propTypes = {
-    departments: PropTypes.object.isRequired,
-    fetchDepartments: PropTypes.func.isRequired,
-  }*/
+class TimetablePage extends Component {
+  static propTypes = {
+    timetable: PropTypes.object.isRequired,
+    fetchTimetable: PropTypes.func.isRequired,
+    routeParams: PropTypes.object.isRequired,
+    activateTimetableTab: PropTypes.func.isRequired,
+    activeTab: PropTypes.number,
+  }
 
   componentWillMount() {
-    //this.props.fetchDepartments();
+    const { dept, course } = this.props.routeParams;
+    this.props.fetchTimetable(dept, course);
   }
 
   render() {
+    const { timetable } = this.props;
     return (
-      <div>timetable page { JSON.stringify(this.props.routeParams) }</div>
+      <LoadingIndicator wait={timetable.loading}>
+        <TimetableTabs {...this.props} timetable={timetable.lectures} />
+      </LoadingIndicator>
     );
   }
 }
 
-/*const mapStateToProps = ({ departments }) => ({
-  departments,
+const mapStateToProps = ({ timetable, activeTab }) => ({
+  timetable,
+  activeTab,
 });
 
 const mapDispatchToProps = (dispatch) => (
   bindActionCreators({
-    fetchDepartments,
+    fetchTimetable,
+    activateTimetableTab,
   }, dispatch)
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimetablePage);*/
+export default connect(mapStateToProps, mapDispatchToProps)(TimetablePage);

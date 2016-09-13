@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
-import Spinner from './ui/Spinner';
+import { Spinner } from 'react-mdl';
 
 const LoadingIndicator = ({ wait, children }) => {
   let content = null;
   if (wait) {
-    content = <Spinner />;
+    content = <Spinner singleColor />;
   } else {
     content = children;
   }
@@ -14,7 +14,7 @@ const LoadingIndicator = ({ wait, children }) => {
 
 LoadingIndicator.propTypes = {
   wait: PropTypes.bool.isRequired,
-  children: PropTypes.element,
+  children: PropTypes.node,
 };
 
 export default LoadingIndicator;
