@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Tab, Content, MDLComponent } from 'react-mdl';
+import { Tabs, Tab, MDLComponent } from 'react-mdl';
+import TimetableContent from './TimetableContent';
 
 const mapByDay = (timetable) => {
   const mappedByDay = {};
@@ -13,6 +14,7 @@ const mapByDay = (timetable) => {
 
 const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab }) => {
   const mappedByDay = mapByDay(timetable);
+  const lessonsByDay = Object.values(mappedByDay);
 
   const tabs = Object.keys(mappedByDay).map((day, index) => (
     <Tab key={index}>{day}</Tab>
@@ -29,9 +31,7 @@ const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab }) => {
           {tabs}
         </Tabs>
       </MDLComponent>
-      <Content>
-        <div>Content for the tab: {activeTab}</div>
-      </Content>
+      <TimetableContent timetableForOneDay={lessonsByDay[activeTab]} />
     </div>
   );
 };
