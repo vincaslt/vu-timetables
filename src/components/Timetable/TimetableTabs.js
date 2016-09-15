@@ -12,9 +12,10 @@ const mapByDay = (timetable) => {
   return mappedByDay;
 };
 
-const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab }) => {
+const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab, location }) => {
   const mappedByDay = mapByDay(timetable);
   const lessonsByDay = Object.values(mappedByDay);
+  const group = Number(location.query.group) || null;
 
   const tabs = Object.keys(mappedByDay).map((day, index) => (
     <Tab key={index}>{day}</Tab>
@@ -31,7 +32,7 @@ const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab }) => {
           {tabs}
         </Tabs>
       </MDLComponent>
-      <TimetableContent timetableForOneDay={lessonsByDay[activeTab]} />
+      <TimetableContent timetableForOneDay={lessonsByDay[activeTab]} group={group} />
     </div>
   );
 };
@@ -40,6 +41,7 @@ TimetableTabs.propTypes = {
   timetable: PropTypes.arrayOf(PropTypes.object).isRequired,
   activateTimetableTab: PropTypes.func.isRequired,
   activeTab: PropTypes.number,
+  location: PropTypes.object,
 };
 
 export default TimetableTabs;
