@@ -109,6 +109,7 @@ function getTimetable(department, courseId) {
     var formattedTimes = tagValues[0].split(' - ');
     var lectureModel = {
       title: tagValues[3],
+      optional: tagValues[3].includes('Pasirenkamasis'),
       time: {
         day: currentDay,
         start: getTime(formattedTimes[0]),
