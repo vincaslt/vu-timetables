@@ -21,6 +21,15 @@ class TimetablePage extends Component {
     this.props.fetchTimetable(dept, course);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const currentProps = this.props.routeParams;
+    const { dept, course } = nextProps.routeParams;
+    if (dept !== currentProps.dept ||
+        course !== currentProps.course) {
+      this.props.fetchTimetable(dept, course);
+    }
+  }
+
   render() {
     const { timetable } = this.props;
     return (

@@ -20,6 +20,14 @@ class CoursesPage extends Component {
     this.props.fetchCourses(this.props.routeParams.dept);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const currentDept = this.props.routeParams.dept;
+    const nextDept = nextProps.routeParams.dept;
+    if (nextDept !== currentDept) {
+      this.props.fetchCourses(nextDept);
+    }
+  }
+
   handleSelectCourse = (course) => {
     this.props.push(`/${course.departmentId}/${course.id}`);
   }
