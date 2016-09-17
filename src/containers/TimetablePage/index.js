@@ -45,11 +45,22 @@ export default class TimetablePage extends Component {
   }
 
   render() {
-    const { timetable, location } = this.props;
-    const group = Number(location.query.group) || null;
+    const { timetable, location, activeTab } = this.props;
+    let optionalLectures = location.query.opt || [];
+    if (!Array.isArray(optionalLectures)) {
+      optionalLectures = Array.of(optionalLectures);
+    }
+    const timetableTabsProps = {
+      lectures: timetable.lectures,
+      activateTimetableTab: this.props.activateTimetableTab,
+      group: Number(location.query.group) || null,
+      optionalLectures,
+      activeTab,
+    };
+
     return (
       <LoadingIndicator wait={timetable.loading}>
-        <TimetableTabs {...this.props} timetable={timetable.lectures} group={group} />
+        <TimetableTabs {...timetableTabsProps} />
       </LoadingIndicator>
     );
   }

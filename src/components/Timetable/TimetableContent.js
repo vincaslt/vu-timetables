@@ -1,10 +1,22 @@
 import React, { PropTypes } from 'react';
 import { Content } from 'react-mdl';
 
-const TimetableContent = ({ timetableForOneDay = [], group = null }) => {
-  const lectures = group === null ?
-    timetableForOneDay :
-    timetableForOneDay.filter(lecture => (lecture.group === group));
+const optionalLecturesFilter = (lecture, optionalLectures) => (
+  optionalLectures.length === 0 ||
+  !lecture.optional ||
+  optionalLectures.includes(lecture.id)
+);
+
+const groupFilter = (lecture, group) => (
+  (group === null || lecture.group === group)
+);
+
+const TimetableContent = ({ timetableForOneDay = [], group = null, optionalLectures = [] }) => {
+  const lectures = timetableForOneDay
+    .filter(lecture => (
+      groupFilter(lecture, group) &&
+      optionalLecturesFilter(lecture, optionalLectures)
+    ));
 
   const lectureNames = lectures.map((lecture, index) => {
     const groupString = group === null ? `[${lecture.group}gr.] ` : null;
@@ -27,7 +39,8 @@ const TimetableContent = ({ timetableForOneDay = [], group = null }) => {
 
 TimetableContent.propTypes = {
   timetableForOneDay: PropTypes.arrayOf(PropTypes.object),
-  group: PropTypes.number
+  group: PropTypes.number,
+  optionalLectures: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default TimetableContent;

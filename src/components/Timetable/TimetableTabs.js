@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import { Tabs, Tab, MDLComponent } from 'react-mdl';
 import TimetableContent from './TimetableContent';
 
-const mapByDay = (timetable) => {
+const mapByDay = (lectures) => {
   const mappedByDay = {};
-  timetable.forEach(lecture => {
+  lectures.forEach(lecture => {
     const day = lecture.time.day;
     mappedByDay[day] = mappedByDay[day] || [];
     mappedByDay[day].push(lecture);
@@ -12,9 +12,16 @@ const mapByDay = (timetable) => {
   return mappedByDay;
 };
 
-const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab, group = null }) => {
-  const mappedByDay = mapByDay(timetable);
-  const lessonsByDay = Object.values(mappedByDay);
+const TimetableTabs = (
+  {
+    lectures,
+    activeTab = 0,
+    activateTimetableTab,
+    group = null,
+    optionalLectures = [],
+  }) => {
+  const mappedByDay = mapByDay(lectures);
+  const lecturesByDay = Object.values(mappedByDay);
 
   const tabs = Object.keys(mappedByDay).map((day, index) => (
     <Tab key={index}>{day}</Tab>
@@ -31,16 +38,21 @@ const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab, group =
           {tabs}
         </Tabs>
       </MDLComponent>
-      <TimetableContent timetableForOneDay={lessonsByDay[activeTab]} group={group} />
+      <TimetableContent
+        timetableForOneDay={lecturesByDay[activeTab]}
+        group={group}
+        optionalLectures={optionalLectures}
+      />
     </div>
   );
 };
 
 TimetableTabs.propTypes = {
-  timetable: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lectures: PropTypes.arrayOf(PropTypes.object).isRequired,
   activateTimetableTab: PropTypes.func.isRequired,
   activeTab: PropTypes.number,
   group: PropTypes.number,
+  optionalLectures: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default TimetableTabs;
