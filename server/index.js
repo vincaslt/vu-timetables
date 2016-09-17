@@ -100,6 +100,10 @@ function getTimetable(department, courseId) {
         });
     }
 
+    var lectors = [tagValues[5]]; // TODO really have to rework this, to account for tag itself
+    while (!tagValues[6].includes('(')) {
+      lectors = lectors.concat(tagValues.splice(6, 1));
+    }
 
     var auditorium = tagValues[6];
     if (tagValues[7] && !TIME_REGEXP.test(tagValues[7])) {
@@ -123,7 +127,7 @@ function getTimetable(department, courseId) {
       group: group,
       subgroups: subgroups,
       type: tagValues[4],
-      lector: tagValues[5],
+      lectors: lectors,
       auditorium: auditorium
     };
 
