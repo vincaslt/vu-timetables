@@ -27,6 +27,7 @@ export default class TimetablePage extends Component {
     routeParams: PropTypes.object.isRequired,
     activateTimetableTab: PropTypes.func.isRequired,
     activeTab: PropTypes.number,
+    location: PropTypes.object,
   }
 
   componentWillMount() {
@@ -44,10 +45,11 @@ export default class TimetablePage extends Component {
   }
 
   render() {
-    const { timetable } = this.props;
+    const { timetable, location } = this.props;
+    const group = Number(location.query.group) || null;
     return (
       <LoadingIndicator wait={timetable.loading}>
-        <TimetableTabs {...this.props} timetable={timetable.lectures} />
+        <TimetableTabs {...this.props} timetable={timetable.lectures} group={group} />
       </LoadingIndicator>
     );
   }

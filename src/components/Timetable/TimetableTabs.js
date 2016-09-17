@@ -12,10 +12,9 @@ const mapByDay = (timetable) => {
   return mappedByDay;
 };
 
-const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab, location }) => {
+const TimetableTabs = ({ timetable, activeTab = 0, activateTimetableTab, group = null }) => {
   const mappedByDay = mapByDay(timetable);
   const lessonsByDay = Object.values(mappedByDay);
-  const group = Number(location.query.group) || null;
 
   const tabs = Object.keys(mappedByDay).map((day, index) => (
     <Tab key={index}>{day}</Tab>
@@ -41,7 +40,7 @@ TimetableTabs.propTypes = {
   timetable: PropTypes.arrayOf(PropTypes.object).isRequired,
   activateTimetableTab: PropTypes.func.isRequired,
   activeTab: PropTypes.number,
-  location: PropTypes.object,
+  group: PropTypes.number,
 };
 
 export default TimetableTabs;
