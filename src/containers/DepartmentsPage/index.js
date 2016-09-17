@@ -8,7 +8,19 @@ import { push } from 'react-router-redux';
 
 import './styles.scss';
 
-class DepartmentsPage extends Component {
+const mapStateToProps = ({ departments }) => ({
+  departments,
+});
+
+const mapDispatchToProps = (dispatch) => (
+  bindActionCreators({
+    push,
+    fetchDepartments,
+  }, dispatch)
+);
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class DepartmentsPage extends Component {
   static propTypes = {
     departments: PropTypes.object.isRequired,
     fetchDepartments: PropTypes.func.isRequired,
@@ -35,16 +47,3 @@ class DepartmentsPage extends Component {
     );
   }
 }
-
-const mapStateToProps = ({ departments }) => ({
-  departments,
-});
-
-const mapDispatchToProps = (dispatch) => (
-  bindActionCreators({
-    push,
-    fetchDepartments,
-  }, dispatch)
-);
-
-export default connect(mapStateToProps, mapDispatchToProps)(DepartmentsPage);

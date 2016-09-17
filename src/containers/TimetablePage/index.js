@@ -7,7 +7,20 @@ import { fetchTimetable, activateTimetableTab } from '../../actions/timetable';
 
 import './styles.scss';
 
-class TimetablePage extends Component {
+const mapStateToProps = ({ timetable, activeTab }) => ({
+  timetable,
+  activeTab,
+});
+
+const mapDispatchToProps = (dispatch) => (
+  bindActionCreators({
+    fetchTimetable,
+    activateTimetableTab,
+  }, dispatch)
+);
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class TimetablePage extends Component {
   static propTypes = {
     timetable: PropTypes.object.isRequired,
     fetchTimetable: PropTypes.func.isRequired,
@@ -39,17 +52,3 @@ class TimetablePage extends Component {
     );
   }
 }
-
-const mapStateToProps = ({ timetable, activeTab }) => ({
-  timetable,
-  activeTab,
-});
-
-const mapDispatchToProps = (dispatch) => (
-  bindActionCreators({
-    fetchTimetable,
-    activateTimetableTab,
-  }, dispatch)
-);
-
-export default connect(mapStateToProps, mapDispatchToProps)(TimetablePage);

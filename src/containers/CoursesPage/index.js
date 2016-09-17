@@ -8,7 +8,19 @@ import { push } from 'react-router-redux';
 
 import './styles.scss';
 
-class CoursesPage extends Component {
+const mapStateToProps = ({ courses }) => ({
+  courses,
+});
+
+const mapDispatchToProps = (dispatch) => (
+  bindActionCreators({
+    push,
+    fetchCourses,
+  }, dispatch)
+);
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class CoursesPage extends Component {
   static propTypes = {
     courses: PropTypes.object.isRequired,
     fetchCourses: PropTypes.func.isRequired,
@@ -44,16 +56,3 @@ class CoursesPage extends Component {
     );
   }
 }
-
-const mapStateToProps = ({ courses }) => ({
-  courses,
-});
-
-const mapDispatchToProps = (dispatch) => (
-  bindActionCreators({
-    push,
-    fetchCourses,
-  }, dispatch)
-);
-
-export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
