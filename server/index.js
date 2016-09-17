@@ -168,8 +168,8 @@ function getTimetable(department, courseId) {
         var group = 0;
         var lectures = [];
         columns.forEach(function(column) {
+          group++;
           if (column && column.value) {
-            group++;
             var tagValues = column.value.split(/[\n]+/)
               .map(function (str) {
                 return str.trim();
