@@ -2,6 +2,7 @@ var restify = require('restify');
 var Promise = require('bluebird');
 var xray = require('x-ray');
 var entities = require("entities");
+var cheerio = require("cheerio");
 require('es6-shim');
 
 var p = Promise.promisify;
@@ -84,7 +85,20 @@ function getTimetable(department, courseId) {
     };
   }
 
-  var parseLectures = function(tagValues, currentDay, evenWeek, group) {
+  var getLectureIdFromTag = function(tag, title) {
+    var $ = cheerio.load(tag);
+    var lectureId = null;
+    $('a').each(function(id, el) {
+      var href = $(this).attr('href');
+      if (!lectureId && href.includes('subjects') && $(this).text().trim() === title) {
+        var splitLink = href.split('/');
+        lectureId = splitLink[splitLink.length - 2];
+      }
+    });
+    return lectureId;
+  }
+
+  var parseLectures = function(tagValues, currentDay, evenWeek, group, columnTag) {
     if (!tagValues || tagValues.length < 7) {
       return [];
     }
@@ -115,6 +129,7 @@ function getTimetable(department, courseId) {
 
     var formattedTimes = tagValues[0].split(' - ');
     var lectureModel = {
+      id: getLectureIdFromTag(columnTag, tagValues[3]),
       title: tagValues[3],
       optional: tagValues[3].includes('Pasirenkamasis'),
       time: {
@@ -139,25 +154,31 @@ function getTimetable(department, courseId) {
       tagValues.slice(7),
       currentDay,
       evenWeek,
-      group
+      group,
+      columnTag
     ));
   }
 
   var getLecuresInRow = function (row, currentDay) {
-    return p(x(row, ['td | trim | decode']))()
+    return p(x(row, 'td', [{
+      tag: '@html',
+      value: '@text | trim | decode'
+    }]))()
       .then(function (columns) {
         var group = 0;
         var lectures = [];
         columns.forEach(function(column) {
-          group++;
-          var tagValues = column.split(/[\n]+/)
-            .map(function (str) {
-              return str.trim();
-            })
-            .filter(Boolean);
-          lectures = lectures.concat(
-            parseLectures(tagValues, currentDay, true, group)
-          );
+          if (column && column.value) {
+            group++;
+            var tagValues = column.value.split(/[\n]+/)
+              .map(function (str) {
+                return str.trim();
+              })
+              .filter(Boolean);
+            lectures = lectures.concat(
+              parseLectures(tagValues, currentDay, true, group, column.tag)
+            );
+          }
         });
         return lectures;
       });
