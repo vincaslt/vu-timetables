@@ -3,6 +3,7 @@ var Promise = require('bluebird');
 var xray = require('x-ray');
 var entities = require("entities");
 var cheerio = require("cheerio");
+var _ = require('lodash');
 require('es6-shim');
 
 var p = Promise.promisify;
@@ -201,7 +202,12 @@ function getTimetable(department, courseId) {
   }
 
   return parseTable().then(function (tableRows) {
-    return parseTimetable(tableRows, 0, [], '');
+    return parseTimetable(tableRows, 0, [], '')
+      .then(function(lectures) {
+        return _.uniqWith(lectures, function(prev, next) {
+          return _.isEqual(prev, next);
+        });
+      });
   });
 }
 
