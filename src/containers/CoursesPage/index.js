@@ -48,10 +48,12 @@ export default class CoursesPage extends Component {
     const { courses } = this.props;
     return (
       <LoadingIndicator wait={courses.loading}>
-        <CoursesList
-          courses={courses.list}
-          onCourseSelect={this.handleSelectCourse}
-        />
+        <div className="page-content">
+          <CoursesList
+            courses={courses.list}
+            onCourseSelect={this.handleSelectCourse}
+          />
+        </div>
       </LoadingIndicator>
     );
   }

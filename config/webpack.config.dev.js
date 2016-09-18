@@ -75,10 +75,12 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        include: srcPath,
         loader: 'style!css!sass'
       }
     ]
+  },
+  sassLoader: {
+    includePaths: [srcPath],
   },
   eslint: {
     configFile: path.join(__dirname, 'eslint.js'),

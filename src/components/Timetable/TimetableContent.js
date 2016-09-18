@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Content } from 'react-mdl';
 
 const optionalLecturesFilter = (lecture, optionalLectures) => (
   optionalLectures.length === 0 ||
@@ -29,11 +28,11 @@ const TimetableContent = ({ timetableForOneDay = [], group = null, optionalLectu
   });
 
   return (
-    <Content>
+    <div className="page-content">
       <ul>
         {lectureNames}
       </ul>
-    </Content>
+    </div>
   );
 };
 

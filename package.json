@@ -46,6 +46,7 @@
     "axios": "^0.13.1",
     "bluebird": "^3.4.1",
     "es7-shim": "^6.0.0",
+    "material-design-lite": "^1.2.1",
     "react": "^15.2.1",
     "react-bootstrap": "^0.30.0",
     "react-dom": "^15.2.1",

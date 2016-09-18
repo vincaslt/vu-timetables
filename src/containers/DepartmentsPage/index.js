@@ -39,10 +39,12 @@ export default class DepartmentsPage extends Component {
     const { departments } = this.props;
     return (
       <LoadingIndicator wait={departments.loading}>
-        <DepartmentsList
-          departments={departments.list}
-          onDepartmentSelect={this.handleSelectDepartment}
-        />
+        <div className="page-content">
+          <DepartmentsList
+            departments={departments.list}
+            onDepartmentSelect={this.handleSelectDepartment}
+          />
+        </div>
       </LoadingIndicator>
     );
   }

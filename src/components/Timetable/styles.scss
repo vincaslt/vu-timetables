@@ -1,0 +1,12 @@
+@import 'global';
+
+$tt-timetable-tabs-bg-color: unquote("rgb(#{$palette-grey-50})");
+
+.timetable-tabs {
+  display: flex;
+  flex-direction: column;
+
+  .timetable-tabs-header {
+    background-color: $tt-timetable-tabs-bg-color;
+  }
+}

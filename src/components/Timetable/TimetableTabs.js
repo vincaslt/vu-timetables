@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { Tabs, Tab, MDLComponent } from 'react-mdl';
 import TimetableContent from './TimetableContent';
 
+import './styles.scss';
+
 const mapByDay = (lectures) => {
   const mappedByDay = {};
   lectures.forEach(lecture => {
@@ -28,11 +30,12 @@ const TimetableTabs = (
   ));
 
   return (
-    <div>
-      <MDLComponent>
+    <div className="timetable-tabs">
+      <MDLComponent >
         <Tabs
           activeTab={activeTab}
           onChange={tabId => activateTimetableTab(tabId)}
+          className="timetable-tabs-header"
           ripple
         >
           {tabs}

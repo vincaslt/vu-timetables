@@ -1,0 +1,35 @@
+@import 'global';
+
+
+$tt-main-content-height-desktop: 95%;
+$tt-main-content-width-desktop: 80%;
+
+$tt-main-content-height-mobile: 100%;
+$tt-main-content-width-mobile: 100%;
+
+.app {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .main-content {
+    width: $tt-main-content-width-mobile;
+    height: $tt-main-content-height-mobile;
+    background-color: $tt-content-bg-color;
+    overflow: hidden;
+    @include shadow-2dp();
+
+    @media (min-width: $grid-desktop-breakpoint) {
+      & {
+        width: $tt-main-content-width-desktop;
+        height: $tt-main-content-height-desktop;
+      }
+    }
+
+    & > div {
+      height: 100%;
+    }
+  }
+}

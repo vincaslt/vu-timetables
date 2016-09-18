@@ -1,0 +1,20 @@
+@import 'global';
+
+$tt-loading-spinner-size: 56px;
+
+.loading-indicator {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > .spinner {
+    width: $tt-loading-spinner-size;
+    height: $tt-loading-spinner-size;
+  }
+
+  & > .text {
+    margin-top: 10px;
+  }
+}
