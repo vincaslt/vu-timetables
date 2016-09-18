@@ -7,6 +7,8 @@ $tt-main-content-width-desktop: 80%;
 $tt-main-content-height-mobile: 100%;
 $tt-main-content-width-mobile: 100%;
 
+$tt-main-content-bg-color: unquote("rgb(#{$color-white})");
+
 .app {
   display: flex;
   flex-direction: row;
@@ -17,7 +19,7 @@ $tt-main-content-width-mobile: 100%;
   .main-content {
     width: $tt-main-content-width-mobile;
     height: $tt-main-content-height-mobile;
-    background-color: $tt-content-bg-color;
+    background-color: $tt-main-content-bg-color;
     overflow: hidden;
     @include shadow-2dp();
 
