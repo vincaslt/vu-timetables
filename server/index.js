@@ -123,7 +123,7 @@ function getTimetable(department, courseId) {
     var auditorium = tagValues[6];
     if (tagValues[7] && !TIME_REGEXP.test(tagValues[7])) {
       var additional = tagValues.splice(7, 1)[0];
-      if (additional.startsWith('Komentarai:')) {
+      if (!additional.startsWith('Komentarai:')) {
         auditorium = [auditorium].concat(additional);
       }
     }
