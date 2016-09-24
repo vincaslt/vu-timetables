@@ -26,10 +26,7 @@ It returns arrays of [JSON](https://en.wikipedia.org/wiki/JSON) objects. The end
 * `/courses/{departmentId}` - array of course objects of courses available at the department. Example: `https://timetables.stonyvin.net/api/courses/gmf`
 * `/timetable/{departmentId}/{courseId}` - array of lecture objects. Example: `https://timetables.stonyvin.net/api/timetable/mif/33`
 
-API is at present a standalone server, which exposes only the following endpoints. When the front-end application is ready, the API server will most likely also serve the static files.
-
 Note: the api is still a work-in-progress, and while it's unlikely that endpoints will change, data structure might.
-
 
 ### Application
 
