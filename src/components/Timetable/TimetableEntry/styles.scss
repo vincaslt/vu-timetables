@@ -1,0 +1,76 @@
+@import 'variables';
+
+$entry-highligh-color: unquote("rgb(#{$palette-grey-100})");
+$entry-highligh-color-light: unquote("rgb(#{$palette-grey-50})");
+
+@mixin group-x($id, $red, $green, $blue) {
+  &.group-#{$id} {
+    border-left: 5px solid rgba($red, $green, $blue, 1);
+  }
+}
+
+.timetable-entry {
+  display: flex;
+  flex-direction: row;
+  height: 60px;
+
+  align-items: center;
+  border-top: 1px solid $entry-highligh-color;
+  border-right: 1px solid $entry-highligh-color;
+
+  @include typo-subhead(false, true);
+  @include group-x(0, 0, 0, 255);
+  @include group-x(1, 255, 255, 0);
+  @include group-x(2, 0, 255, 0);
+  @include group-x(3, 235, 40, 40);
+  @include group-x(4, 153, 0, 204);
+  @include group-x(5, 0, 204, 204);
+  @include group-x(6, 255, 153, 0);
+
+  h3, h4 {
+    margin: 0;
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    align-items: center;
+    padding: 5px 10px;
+  }
+
+  .group-content {
+    padding: 0 10px;
+    border-right: 1px solid $entry-highligh-color;
+    align-items: center;
+    height: 100%;
+    display: flex;
+    background-color: $entry-highligh-color-light;
+  }
+
+  .time-container {
+    background-color: $entry-highligh-color;
+    width: 180px;
+    height: 100%;
+    padding: 5px 15px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .time-separator:after {
+      content: "-";
+      margin: 0 5px 0 7px;
+    }
+
+    h3 {
+      display: flex;
+      align-items: flex-start;
+    }
+  }
+}
+
+.timetable-entry:last-child {
+  .content {
+    border-bottom: 1px solid $entry-highligh-color;
+  }
+}

@@ -9,6 +9,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import 'es7-shim';
 import 'react-mdl/extra/material.js';
+import './global.scss';
 
 injectTapEventPlugin();
 

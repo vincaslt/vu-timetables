@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import TimetableEntry from './TimetableEntry';
+import isEqual from 'lodash.isequal';
 
 const optionalLecturesFilter = (lecture, optionalLectures) => (
   optionalLectures.length === 0 ||
@@ -17,21 +19,26 @@ const TimetableContent = ({ timetableForOneDay = [], group = null, optionalLectu
       optionalLecturesFilter(lecture, optionalLectures)
     ));
 
-  const lectureNames = lectures.map((lecture, index) => {
-    const groupString = group === null ? `[${lecture.group}gr.] ` : null;
+  let timeIntervalGroup = 0;
+  let prevTime = lectures.length > 0 ? lectures[0].time : null;
+  const timetableEntries = lectures.map((lecture, index) => {
+    if (!isEqual(prevTime, lecture.time)) {
+      timeIntervalGroup++;
+      prevTime = lecture.time;
+    }
     return (
-      <li key={index}>
-        {groupString}{lecture.title}
-        : {JSON.stringify(lecture.time.start)} - {JSON.stringify(lecture.time.end)}
-      </li>
-    );
+      <TimetableEntry
+        key={index}
+        timeIntervalGroup={timeIntervalGroup}
+        lecture={lecture}
+        showGroup={group === null}
+      />
+  );
   });
 
   return (
     <div className="page-content">
-      <ul>
-        {lectureNames}
-      </ul>
+      {timetableEntries}
     </div>
   );
 };

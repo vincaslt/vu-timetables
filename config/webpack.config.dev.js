@@ -75,7 +75,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: 'style!css!sass'
+        loader: 'style!css!postcss!sass'
       }
     ]
   },
@@ -87,7 +87,9 @@ module.exports = {
     useEslintrc: false
   },
   postcss: function() {
-    return [autoprefixer];
+    return {
+      defaults: [autoprefixer, require('postcss-discard-comments')({removeAll: true})]
+    };
   },
   plugins: [
     new HtmlWebpackPlugin({
