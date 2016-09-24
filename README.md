@@ -33,8 +33,12 @@ Note: the api is still a work-in-progress, and while it's unlikely that endpoint
 
 ### Application
 
-The application is not ready, so there is no running example yet. It can be run from source on development server with the command: `npm start`
+There is a preview of the application here: http://timetables.stonyvin.net
 
+This is only a preview version, so there is some functionality missing yet. Filters can be applied
+by adding url query parameters, like so: `http://timetables.stonyvin.net/#/mif/33?group=3&opt=skaitiniai-metodai&opt=loginis-programavimas`
+
+Application can be build from source with: `npm start`
 
 ### Notable Technologies Used
 * [ES6 with Babel](https://babeljs.io) (Next-gen JavaScript)
