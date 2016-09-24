@@ -4,6 +4,7 @@ var xray = require('x-ray');
 var entities = require("entities");
 var cheerio = require("cheerio");
 var _ = require('lodash');
+var ecstatic = require('ecstatic');
 require('es6-shim');
 
 var p = Promise.promisify;
@@ -231,6 +232,8 @@ server.get('/api/timetable/:dept/:courseId', function (req, res, next) {
   });
   return next();
 });
+
+server.get(/.*/, ecstatic({ root: __dirname + '/public' }));
 
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
