@@ -37,6 +37,7 @@ $entry-highligh-color-light: unquote("rgb(#{$palette-grey-50})");
     flex-grow: 1;
     align-items: center;
     padding: 5px 10px;
+    height: 100%;
   }
 
   .group-content {

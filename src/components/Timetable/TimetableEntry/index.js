@@ -22,11 +22,14 @@ const TimetableEntry = ({ lecture, timeIntervalGroup = 0, showGroup = false }) =
     </div>
   ) : null;
 
+  const subgroups = lecture.subgroups ?
+    `[${lecture.subgroups.join(', ')}pogr.]` : null;
+
   return (
     <div className={entryClass}>
       {groupContent}
       <div className="content">
-        <h4>{lecture.title}</h4>
+        <h4>{lecture.title} {subgroups}</h4>
       </div>
       <div className="time-container">
         {timeString}
