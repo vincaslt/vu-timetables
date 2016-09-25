@@ -117,7 +117,7 @@ function getTimetable(department, courseId) {
     }
 
     var lectors = [tagValues[5]]; // TODO really have to rework this, to account for tag itself
-    while (!tagValues[6].includes('(')) {
+    while (tagValues[6] && !tagValues[6].includes('(')) {
       lectors = lectors.concat(tagValues.splice(6, 1));
     }
 
